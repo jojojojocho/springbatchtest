@@ -27,7 +27,7 @@ public class SimpleJobConfig {
                 .build();
     }
     @Bean
-    private Step simpleStep() {
+    public Step simpleStep() {
         return stepBuilderFactory.get("simpleStep")
                 .<String,String>chunk(100)
                 .reader(simpleReader())
