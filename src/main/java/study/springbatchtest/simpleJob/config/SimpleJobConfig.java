@@ -37,12 +37,12 @@ public class SimpleJobConfig {
 
     }
     @Bean
-    private SimpleReader simpleReader() {
+    public SimpleReader simpleReader() {
         return new SimpleReader();
     }
 
     @Bean
-    private SimpleWriter simpleWriter() {
+    public SimpleWriter simpleWriter() {
         return new SimpleWriter(this.jdbcTemplate);
     }
 
