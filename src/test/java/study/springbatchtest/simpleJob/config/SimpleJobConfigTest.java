@@ -19,39 +19,57 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(classes = {SimpleJobConfig.class, TestBatchConfig.class})
+@SpringBootTest(classes = {TestJobConfig.class, TestBatchConfig.class}, webEnvironment = WebEnvironment.DEFINED_PORT)
 @SpringBatchTest
+@AutoConfigureWebClient(registerRestTemplate = true)
 class SimpleJobConfigTest {
 
+//     @Autowired
+//     JobLauncherTestUtils jobLauncherTestUtils;
+
+//     @Autowired
+//     JdbcTemplate jdbcTemplate;
+
+//     @BeforeEach
+//     void setUp() {
+//     }
+
+//     @AfterEach
+//     void tearDown() {
+//     }
+
+//     @DisplayName("simpleJob test")
+//     @Test
+//     public void simpleJobTest() throws Exception {
+//         //given
+//         JobParameters jobParameters = new JobParametersBuilder().addString("requestDate", "20220920")
+//                 .addLong("date", new Date().getTime())
+//                 .toJobParameters();
+
+//         //when
+//         JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
+
+
+//         //then
+//         assertEquals(jobExecution.getExitStatus(), BatchStatus.COMPLETED);
+//         assertEquals(jobExecution.getExitStatus(), ExitStatus.COMPLETED);
+
+//     }
+    
     @Autowired
-    JobLauncherTestUtils jobLauncherTestUtils;
+    private JobLauncherTestUtils jobLauncherTestUtils;
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    private Job job;
 
-    @BeforeEach
-    void setUp() {
-    }
 
-    @AfterEach
-    void tearDown() {
-    }
-
-    @DisplayName("simpleJob test")
     @Test
-    public void simpleJobTest() throws Exception {
-        //given
-        JobParameters jobParameters = new JobParametersBuilder().addString("requestDate", "20220920")
-                .addLong("date", new Date().getTime())
-                .toJobParameters();
-
-        //when
-        JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
+    public void testJob() throws Exception {
+        this.jobLauncherTestUtils.setJob(job);
 
 
-        //then
-        assertEquals(jobExecution.getExitStatus(), BatchStatus.COMPLETED);
-        assertEquals(jobExecution.getExitStatus(), ExitStatus.COMPLETED);
+        JobExecution jobExecution = jobLauncherTestUtils.launchJob();
 
+        Assertions.assertThat("COMPLETED").isEqualTo(jobExecution.getExitStatus().getExitCode());
     }
 }
